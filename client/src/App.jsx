@@ -1,12 +1,11 @@
-
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-
   return (
     <>
-      <h1 className="text-5xl">React</h1>
+      <AppRoutes />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
