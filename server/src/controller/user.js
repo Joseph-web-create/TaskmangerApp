@@ -1,41 +1,47 @@
-import { Schema, model } from "mongoose";
+import createHttpError from "http-errors";
+import User from "../model/user.js";
+import bcrypt from "bcryptjs";
+import generateToken from "../config/generateAcessToken.js";
 
-const userSchema = new Schema(
-  {
-    username: {
-      type: String,
-      require: [true, "username is required"],
-      unique: true,
-      trim: true,
-    },
-    email: {
-      type: String,
-      require: [true, "Email is required"],
-      unique: true,
-      trim: true,
-    },
-    password: {
-      type: String,
-      require: [true, "Password is required"],
-      select: false,
-      minLength: [5, "Password must be 5 characters long"],
-    },
-    profilePicture: {
-      type: String,
-      default: "",
-    },
-    profilePictureId: {
-      type: String,
-      default: "",
-    },
-    bio: {
-      type: String,
-      maxLength: [150, "Bio cannot be more than 150 characters"],
-    },
-  },
-  { timestamps: true }
-);
+export const registerUser = async (req, res, next) => {
+  const { username, email, password } = req.body;
 
-const User = model("User", userSchema);
+  try {
+    if (!username || !email || !password) {
+      return next(createHttpError(400, "All fields required"));
+    }
 
-export default User;
+    const [existingUsername, existingEmail] = await Promise.all([
+      User.findOne({ username }),
+      User.findOne({ email }),
+    ]);
+
+    if (existingUsername) {
+      return next(createHttpError(400, "Username already exists"));
+    }
+
+    if (existingEmail) {
+      return next(createHttpError(400, "Email already exists"));
+    }
+
+    const salt = await bcrypt.genSalt(10);
+
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      username,
+      email,
+      password: hashPassword,
+    });
+
+    const accessToken = generateToken(user._id);
+
+    res.status(201).json({
+      success: true,
+      message: "Account created successfully",
+      accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

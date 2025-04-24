@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
+import userRoutes from "./src/routes/user.js";
 
 const app = express();
 
@@ -9,6 +10,8 @@ app.use(morgan("dev"));
 
 app.use(express.urlencoded({ extended: true }));
 app.disable("x-powered-by");
+
+app.use("/api/reg", userRoutes);
 
 app.use((req, res, next) => {
   return next(createHttpError(404, `Page not found ${req.originalUrl}`));
