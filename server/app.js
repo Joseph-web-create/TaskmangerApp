@@ -2,9 +2,18 @@ import express, { json } from "express";
 import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import userRoutes from "./src/routes/user.js";
+import cors from "cors";
 
 const app = express();
 
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  opttionSuccessStatus: 200,
+  methods: ["GET", "POST", "PATCH", "DELETE"],
+  credential: true,
+};
+
+app.use(cors(corsOptions));
 app.use(json({ limit: "25mb" }));
 app.use(morgan("dev"));
 

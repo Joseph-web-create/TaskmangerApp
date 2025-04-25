@@ -10,11 +10,11 @@ export default function Home() {
   const { accessToken } = useAuth();
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center py-6 flex-col lg:flex-row">
         <img src={icon} />
         {accessToken ? <OnceLogin /> : <NotLogin />}
       </div>
-      <div className="flex justify-between items-center h-[90vh]">
+      <div className="flex justify-between items-center h-[90vh] flex-col lg:flex-row">
         <div className="w-[538px]">
           <h1 className="text-[50px]">
             Manage your Tasks on <p className="text-[#974FD0]">TaskDuty</p>
@@ -28,9 +28,11 @@ export default function Home() {
 
           <Link
             to={accessToken ? "/task" : "/login"}
-            className="w-[130px] btn bg-[#974FD0] text-white hover:bg-[#594669] rounded-sm py-5"
+            className={`w-[130px] btn bg-[#974FD0] text-white hover:bg-[#a49aac] rounded-sm py-6 text-l ${
+              accessToken ? "" : "w-[200px] font-bold"
+            }`}
           >
-            {accessToken ? "Go to My Task" : "Login"}
+            {accessToken ? "Go to My Task" : "Login to see Tasks"}
           </Link>
         </div>
         <div>

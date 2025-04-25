@@ -1,5 +1,5 @@
 import useLocalStorage from "../hooks/useLocalStorage";
-import { AuthProvide } from "./store";
+import { AuthContext } from "./store";
 
 export default function AuthProvider({ children }) {
   const [accessToken, setAccessToken] = useLocalStorage(
@@ -8,8 +8,8 @@ export default function AuthProvider({ children }) {
   );
 
   return (
-    <AuthProvide.Provider value={{ accessToken, setAccessToken }}>
+    <AuthContext.Provider value={{ accessToken, setAccessToken }}>
       {children}
-    </AuthProvide.Provider>
+    </AuthContext.Provider>
   );
 }

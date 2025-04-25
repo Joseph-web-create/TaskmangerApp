@@ -1,13 +1,14 @@
 import { useContext, createContext } from "react";
 
-export const AuthProvide = createContext({});
+
+export const AuthContext = createContext({});
 
 export default function useAuth() {
-  const useStore = useContext(AuthProvide);
+  const context = useContext(AuthContext);
 
-  if (useStore === undefined) {
-    throw new Error("Auth must be defined");
+  if (context === undefined) {
+    throw new Error("AuthContext must be used within an AuthProvider");
   }
 
-  return useStore;
+  return context;
 }
