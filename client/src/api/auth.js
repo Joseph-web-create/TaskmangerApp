@@ -1,6 +1,9 @@
 import axiosInstance from "../utils/axiosInstance";
 
-export default function registerAuth(formdata) {
+export function registerAuth(formdata) {
   return axiosInstance.post("/reg/register", formdata);
 }
 
+export function loginAuth(formdata) {
+  return axiosInstance.post("/reg/login", formdata);
+}

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import {
   validateEmail,
   validateUsername,
   validatePassword,
 } from "../../utils/formValidate";
-import registerAuth from "../../api/auth";
+import { registerAuth } from "../../api/auth";
 import useAuth from "../../store/store";
 import { toast } from "sonner";
 import handleError from "../../utils/handleError";
@@ -103,7 +103,7 @@ export default function Login() {
             </button>
             <div className="my-3 text-center border py-2">
               <span>Have an account?.. </span>
-              <Link to="/register" className="text-[#974FD0] font-bold ">
+              <Link to="/login" className="text-[#974FD0] font-bold ">
                 Login
               </Link>
             </div>

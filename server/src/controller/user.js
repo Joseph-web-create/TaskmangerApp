@@ -45,3 +45,39 @@ export const registerUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const loginUser = async (req, res, next) => {
+  const { username, password } = req.body;
+
+  try {
+    if (!username || !password) {
+      return next(createHttpError(400, "Username & password is required"));
+    }
+
+    const user = await User.findOne({ username }).select("+password");
+
+    if (!user) {
+      return next(createHttpError(400, "Account not found"));
+    }
+
+    const comparePass = await bcrypt.compare(password, user.password);
+
+    if (!comparePass) {
+      return next(createHttpError(401, "Invalid creadentials"));
+    }
+
+    const accessToken = await generateToken(user._id);
+
+    res.status(200).json({
+      success: true,
+      message: `Welcome ${user.username}`,
+      accessToken,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const logOut = async (req, res, next) => {
+  res.status(200).json({ success: true, message: "Logout successfully" });
+};

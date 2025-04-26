@@ -1,9 +1,15 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { validatePassword, validateUsername } from "../../utils/formValidate";
+import { loginAuth } from "../../api/auth";
+import handleError from "../../utils/handleError";
+import useAuth from "../../store/store";
+import { toast } from "sonner";
 
 export default function Login() {
-    const [revealPassword, setRevealPassword] = useState(false);
+  const [revealPassword, setRevealPassword] = useState(false);
+  const { setAccessToken } = useAuth();
 
   const {
     register,
@@ -15,11 +21,27 @@ export default function Login() {
     setRevealPassword((prev) => !prev);
   };
 
+  const navigate = useNavigate();
+
+  const inputData = async (data) => {
+    try {
+      const res = await loginAuth(data);
+      if (res.status === 200) {
+        setAccessToken(res.data.accessToken);
+        toast.success(res.data.message);
+        console.log(data);
+        navigate("/");
+      }
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   return (
     <>
       <div className="h-[80vh] flex justify-center items-center">
         <div className="w-[400px]">
-          <form>
+          <form onSubmit={handleSubmit(inputData)}>
             <div className="mb-2">
               <label className="floating-label">
                 <span>UserName</span>
@@ -28,6 +50,9 @@ export default function Login() {
                   placeholder="Username"
                   className="input input-lg w-full"
                   id="username"
+                  {...register("username", {
+                    validate: (value) => validateUsername(value),
+                  })}
                 />
               </label>
             </div>
@@ -39,6 +64,9 @@ export default function Login() {
                   placeholder="Password"
                   className="input input-lg w-full"
                   id="password"
+                  {...register("password", {
+                    validate: (value) => validatePassword(value),
+                  })}
                 />
               </label>
               <button
@@ -52,6 +80,7 @@ export default function Login() {
             <button
               className=" btn bg-[#974FD0] text-white hover:bg-[#594669] rounded-sm w-full"
               type="submit"
+              disabled={isSubmitting}
             >
               Login
             </button>
