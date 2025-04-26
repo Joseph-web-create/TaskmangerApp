@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { validatePassword, validateUsername } from "../../utils/formValidate";
 import { loginAuth } from "../../api/auth";
 import handleError from "../../utils/handleError";
-import useAuth from "../../store/store";
+import {useAuth} from "../../store/store";
 import { toast } from "sonner";
 
 export default function Login() {

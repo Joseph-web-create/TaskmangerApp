@@ -7,7 +7,7 @@ import {
   validatePassword,
 } from "../../utils/formValidate";
 import { registerAuth } from "../../api/auth";
-import useAuth from "../../store/store";
+import { useAuth } from "../../store/store";
 import { toast } from "sonner";
 import handleError from "../../utils/handleError";
 

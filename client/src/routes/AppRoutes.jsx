@@ -4,6 +4,7 @@ import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
 import RootLayOut from "../layouts/RootLayOut";
 import AllTasks from "../components/AllTasks";
+import TasksProvider from "../store/TasksProvider";
 
 export default function AppRoutes() {
   const routes = [
@@ -25,7 +26,11 @@ export default function AppRoutes() {
         },
         {
           path: "task",
-          element: <AllTasks />,
+          element: (
+            <TasksProvider>
+              <AllTasks />
+            </TasksProvider>
+          ),
         },
       ],
     },

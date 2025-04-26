@@ -7,3 +7,11 @@ export function taskInput(formdata, accessToken) {
     },
   });
 }
+
+export function getAllTasks(accessToken) {
+  return axiosInstance.get("/taskApi/allTasks", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}

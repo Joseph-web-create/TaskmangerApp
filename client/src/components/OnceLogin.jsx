@@ -3,7 +3,7 @@ import Modal from "./Model";
 import { useForm } from "react-hook-form";
 import useTags from "../hooks/useTags";
 import { Link } from "react-router";
-import useAuth from "../store/store";
+import { useAuth } from "../store/store";
 import { taskInput } from "../api/task";
 import handleError from "../utils/handleError";
 import { toast } from "sonner";
