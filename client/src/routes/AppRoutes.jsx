@@ -3,6 +3,7 @@ import Home from "../pages/home/Home";
 import Login from "../pages/login/Login";
 import Register from "../pages/register/Register";
 import RootLayOut from "../layouts/RootLayOut";
+import AllTasks from "../components/AllTasks";
 
 export default function AppRoutes() {
   const routes = [
@@ -21,6 +22,10 @@ export default function AppRoutes() {
         {
           path: "login",
           element: <Login />,
+        },
+        {
+          path: "task",
+          element: <AllTasks />,
         },
       ],
     },

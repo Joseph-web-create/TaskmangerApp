@@ -3,6 +3,7 @@ import morgan from "morgan";
 import createHttpError, { isHttpError } from "http-errors";
 import userRoutes from "./src/routes/user.js";
 import cors from "cors";
+import tasksRoute from "./src/routes/tasks.js";
 
 const app = express();
 
@@ -20,7 +21,8 @@ app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 app.disable("x-powered-by");
 
-app.use("/api/reg", userRoutes);
+app.use("/api/auth", userRoutes);
+app.use("/api/taskApi", tasksRoute);
 
 app.use((req, res, next) => {
   return next(createHttpError(404, `Page not found ${req.originalUrl}`));

@@ -1,11 +1,29 @@
-import createHttpError from "http-errors"
-import jwt from "jsonwebtoken"
+import createHttpError from "http-errors";
+import jwt from "jsonwebtoken";
 
+const verifyToken = async (req, res, next) => {
+  const { authorization: token } = req.headers;
 
-const verifyToken = async (req,res,next){
-  const {authorization:token} = req.headers
-
-  if(!token){
-    
+  if (!token) {
+    return next(createHttpError(403, "You're unathenticated"));
   }
-}
+
+  if (!token.startsWith("Bearer")) {
+    return next(createHttpError(401, "Token format is invalid"));
+  }
+
+  const extraction = token.split(" ")[1];
+
+  try {
+    const decodeToken = await jwt.decode(
+      extraction,
+      process.env.SECRET_ACESS_KEY
+    );
+    req.user = decodeToken;
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default verifyToken

@@ -78,6 +78,22 @@ export const loginUser = async (req, res, next) => {
   }
 };
 
+export const autheticateUser = async (req, res, next) => {
+  const { id: userId } = req.user;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return next(createHttpError(499, "user not foundß"));
+    }
+
+    res.status(200).json({ success: true, user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const logOut = async (req, res, next) => {
   res.status(200).json({ success: true, message: "Logout successfully" });
 };
