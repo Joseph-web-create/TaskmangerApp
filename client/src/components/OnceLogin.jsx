@@ -4,6 +4,9 @@ import { useForm } from "react-hook-form";
 import useTags from "../hooks/useTags";
 import { Link } from "react-router";
 import useAuth from "../store/store";
+import { taskInput } from "../api/task";
+import handleError from "../utils/handleError";
+import { toast } from "sonner";
 
 export default function OnceLogin() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,14 +18,24 @@ export default function OnceLogin() {
   } = useForm();
 
   const { tags, setTags, handleTags, removeTag } = useTags();
-  const { user } = useAuth();
+  const { user, accessToken } = useAuth();
 
   const formSubmit = async (data) => {
     const formdata = {
       ...data,
       tags,
     };
-    console.log(formdata);
+    try {
+      const res = await taskInput(formdata, accessToken);
+      if (res.status === 201) {
+        setIsModalOpen(false);
+        toast.success(res.data.message);
+        setTags([]);
+        reset();
+      }
+    } catch (error) {
+      handleError(error);
+    }
   };
   return (
     <div className="flex justify-evenly items-center gap-5">
@@ -119,7 +132,7 @@ export default function OnceLogin() {
       <>
         <div className="avatar avatar-placeholder">
           <div className="bg-neutral text-neutral-content w-12 rounded-full">
-            <span>{user.username.charAt(0)}</span>
+            <span>{user?.username?.charAt(0)}</span>
           </div>
         </div>
       </>
