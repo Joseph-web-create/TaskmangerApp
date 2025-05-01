@@ -20,6 +20,7 @@ export const taskInputs = async (req, res, next) => {
 };
 
 export const allTasks = async (req, res, next) => {
+  
   const { id: userId } = req.user;
 
   if (!userId) {
@@ -34,3 +35,4 @@ export const allTasks = async (req, res, next) => {
     next(error);
   }
 };
+

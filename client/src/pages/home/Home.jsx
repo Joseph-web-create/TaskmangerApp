@@ -32,7 +32,7 @@ export default function Home() {
               accessToken ? "" : "w-[200px] font-bold"
             }`}
           >
-            {accessToken ? "Go to My Task" : "Login to see Tasks"}
+            Go to My Task
           </Link>
         </div>
         <div>

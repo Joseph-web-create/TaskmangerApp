@@ -2,7 +2,7 @@ import { useState } from "react";
 import Modal from "./Model";
 import { useForm } from "react-hook-form";
 import useTags from "../hooks/useTags";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../store/store";
 import { taskInput } from "../api/task";
 import handleError from "../utils/handleError";
@@ -19,6 +19,10 @@ export default function OnceLogin() {
 
   const { tags, setTags, handleTags, removeTag } = useTags();
   const { user, accessToken } = useAuth();
+  const navigate = useNavigate();
+  if (!accessToken) {
+    navigate("/");
+  }
 
   const formSubmit = async (data) => {
     const formdata = {
@@ -37,12 +41,17 @@ export default function OnceLogin() {
       handleError(error);
     }
   };
+
+  const openModal = (e) => {
+    setIsModalOpen(true);
+    e.stopPropagation();
+  };
   return (
     <div className="flex justify-evenly items-center gap-5">
       <>
         <div
           className=" flex gap-3 items-center p-2 cursor-pointer hover:font-bold hover:text-zinc-800 hover:transition duration-150 ease-out rounded-lg z-50 hover:bg-zinc-100"
-          onClick={() => setIsModalOpen(true)}
+          onClick={openModal}
         >
           <span className="text-lg text-[#292929] font-bold">New task</span>
         </div>
@@ -79,7 +88,7 @@ export default function OnceLogin() {
                   placeholder="Description"
                   className="textarea textarea-md w-full"
                   id="description"
-                  {...register("description")}
+                  {...register("description", { required: true })}
                 ></textarea>
               </label>
             </div>

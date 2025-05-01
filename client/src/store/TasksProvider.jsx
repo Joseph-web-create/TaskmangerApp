@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { TasksContext, useAuth } from "./store";
 import { getAllTasks } from "../api/task";
 import handleError from "../utils/handleError";
@@ -9,6 +9,7 @@ export default function TasksProvider({ children }) {
 
   useEffect(() => {
     const fetchPost = async () => {
+       if (!accessToken) return;
       try {
         const res = await getAllTasks(accessToken);
 
