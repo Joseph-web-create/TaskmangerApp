@@ -151,11 +151,7 @@ export default function AllTasks() {
         </button>
       </div>
       {data?.map((task) => (
-        <Tasks
-          tags={task.tags}
-          title={task.title}
-          description={task.description}
-        />
+        <Tasks items={task} />
       ))}
     </>
   );
