@@ -27,7 +27,8 @@ export const allTasks = async (req, res, next) => {
   }
 
   try {
-    const task = await Tasks.find({ userId });
+    const task = await Tasks.find({ userId }).sort({ createdAt: -1 });
+    console.log(task);
     res.status(200).json({ success: true, task });
   } catch (error) {
     next(error);

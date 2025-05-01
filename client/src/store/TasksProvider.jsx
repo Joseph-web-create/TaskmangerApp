@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TasksContext, useAuth } from "./store";
 import { getAllTasks } from "../api/task";
 import handleError from "../utils/handleError";
@@ -21,6 +21,7 @@ export default function TasksProvider({ children }) {
     };
     fetchPost();
   }, [accessToken]);
+  console.log("Task Data", data);
 
   return (
     <TasksContext.Provider value={{ data, setData }}>
