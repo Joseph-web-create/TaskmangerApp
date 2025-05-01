@@ -11,7 +11,7 @@ const routes = express.Router();
 
 routes.post("/register", registerUser);
 routes.post("/login", loginUser);
-routes.get("/logout", logOut);
+routes.post("/logout", logOut);
 routes.get("/user", verifyToken, autheticateUser);
 
 export default routes;

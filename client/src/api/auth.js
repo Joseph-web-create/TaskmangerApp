@@ -15,3 +15,7 @@ export function authenticateUser(token) {
     },
   });
 }
+
+export function logOut() {
+  return axiosInstance.post("/auth/logout", {});
+}

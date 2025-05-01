@@ -85,7 +85,7 @@ export const autheticateUser = async (req, res, next) => {
     const user = await User.findById(userId);
 
     if (!user) {
-      return next(createHttpError(499, "user not foundß"));
+      return next(createHttpError(401, "user not found"));
     }
 
     res.status(200).json({ success: true, user });

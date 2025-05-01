@@ -1,7 +1,7 @@
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 
-const verifyToken = async (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const { authorization: token } = req.headers;
 
   if (!token) {
@@ -15,7 +15,7 @@ const verifyToken = async (req, res, next) => {
   const extraction = token.split(" ")[1];
 
   try {
-    const decodeToken = await jwt.decode(
+    const decodeToken =  jwt.verify(
       extraction,
       process.env.SECRET_ACESS_KEY
     );

@@ -92,7 +92,7 @@ export default function AllTasks() {
                     placeholder="Description"
                     className="textarea textarea-md w-full"
                     id="description"
-                    {...register("description")}
+                    {...register("description", { required: true })}
                   ></textarea>
                 </label>
               </div>
