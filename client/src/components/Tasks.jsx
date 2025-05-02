@@ -25,7 +25,14 @@ export default function Tasks({ items }) {
   };
 
   const formSubmit = (e) => {
-    console.log(e);
+    const { title, description, tags, _id } = e;
+    const formdata = {
+      title,
+      description,
+      tags,
+      _id,
+    };
+    console.log(formdata);
   };
 
   const openModal = () => {
@@ -84,7 +91,7 @@ export default function Tasks({ items }) {
               type="submit"
               className="btn bg-[#974FD0] text-white mt-4 w-full"
             >
-              Share
+              {isSubmitting ? "Sharing post..." : "Share"}
             </button>
           </form>
         </Modal>

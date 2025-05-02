@@ -141,7 +141,7 @@ export default function AllTasks() {
         </div>
       </div>
       <div className="flex justify-between py-6">
-        <h1 className="text-[50px]"> My Tasks</h1>
+        <h1 className="text-[50px]">My Tasks</h1>
         <button
           className="text-[#974FD0] text-2xl cursor-pointer"
           onClick={() => setIsModalOpen(true)}
