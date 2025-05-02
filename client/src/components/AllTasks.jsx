@@ -150,8 +150,8 @@ export default function AllTasks() {
           <span>Add new task</span>
         </button>
       </div>
-      {data?.map((task) => (
-        <Tasks items={task} />
+      {data?.map((task, index) => (
+        <Tasks items={task} key={index} />
       ))}
     </>
   );
