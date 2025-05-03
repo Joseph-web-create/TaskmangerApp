@@ -20,7 +20,6 @@ export const taskInputs = async (req, res, next) => {
 };
 
 export const allTasks = async (req, res, next) => {
-  
   const { id: userId } = req.user;
 
   if (!userId) {
@@ -36,3 +35,40 @@ export const allTasks = async (req, res, next) => {
   }
 };
 
+export const editTask = async (req, res, next) => {
+  const { id: taskId } = req.params;
+  const { title, description, tags } = req.body;
+  const { id: userId } = req.user;
+
+  if (!userId) {
+    return next(createHttpError(400, "Login to edit post"));
+  }
+
+  if (!taskId) {
+    return next(createHttpError(400, "Task ID is required"));
+  }
+
+  try {
+    const updateData = {};
+
+    if (title) updateData.title = title;
+    if (description) updateData.description = description;
+    if (tags) updateData.tags = tags;
+
+    const updatedTask = await Tasks.findOneAndUpdate(
+      { _id: taskId, userId },
+      updateData,
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedTask) {
+      return next(createHttpError(404, "Task not found"));
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "Task updates", updatedTask });
+  } catch (error) {
+    next(error);
+  }
+};

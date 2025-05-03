@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import Modal from "./Model";
 import { useForm } from "react-hook-form";
+import useTags from "../hooks/useTags";
+import { updatedTask } from "../api/task";
+import { useAuth, useTasks } from "../store/store";
+import handleError from "../utils/handleError";
+import { toast } from "sonner";
 
 export default function Tasks({ items }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -10,6 +15,9 @@ export default function Tasks({ items }) {
     reset,
     formState: { errors, isSubmitting },
   } = useForm();
+  const { tags, setTags, handleTags, removeTag } = useTags();
+  const { accessToken } = useAuth();
+  const { setData } = useTasks();
 
   const [edit, setEdit] = useState();
 
@@ -24,15 +32,31 @@ export default function Tasks({ items }) {
     openModal();
   };
 
-  const formSubmit = (e) => {
-    const { title, description, tags, _id } = e;
+  const formSubmit = async (e) => {
+    const { title, description, _id } = e;
     const formdata = {
       title,
       description,
       tags,
-      _id,
     };
-    console.log(formdata);
+
+    try {
+      const res = await updatedTask(formdata, _id, accessToken);
+      if (res.status === 200) {
+        return setData((prev) => {
+          prev.map((items) =>
+            items._id === res.data.updatedTask._id
+              ? res.data.updatedTask
+              : items
+          );
+        });
+      }
+      setIsModalOpen(false);
+      toast.success(res.data.message);
+      console.log(res);
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const openModal = () => {
@@ -83,10 +107,25 @@ export default function Tasks({ items }) {
                   id="tags"
                   placeholder="Add Tags, press enter key to add a tag"
                   {...register("tags")}
+                  onKeyDown={handleTags}
                 />
               </label>
             </div>
-            <div className="flex flex-wrap gap-2 text-gray-400"></div>
+
+            <div className="flex flex-wrap gap-2 text-gray-400">
+              {tags.map((tag, index) => (
+                <div
+                  className="badge badge-neutral gap-2 cursor-pointer "
+                  key={index}
+                  onClick={() => removeTag(index)}
+                >
+                  {tag}
+                  <span className="text-[#974FD0]">
+                    <i className="ri-close-line text-xl "></i>
+                  </span>
+                </div>
+              ))}
+            </div>
             <button
               type="submit"
               className="btn bg-[#974FD0] text-white mt-4 w-full"

@@ -21,8 +21,7 @@ export default function AllTasks() {
 
   const { tags, setTags, handleTags, removeTag } = useTags();
   const { user, accessToken } = useAuth();
-  const { setData } = useTasks();
-  const { data } = useTasks();
+  const { data, setData } = useTasks();
 
   const navigate = useNavigate();
   const home = () => {

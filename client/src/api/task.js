@@ -15,3 +15,11 @@ export function getAllTasks(accessToken) {
     },
   });
 }
+
+export function updatedTask(formdata, id, accessToken) {
+  return axiosInstance.patch(`/taskApi/updateTask${id}`, formdata, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
