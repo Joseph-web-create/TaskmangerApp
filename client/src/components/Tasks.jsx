@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import Modal from "./Model";
 import { useForm } from "react-hook-form";
 import useTags from "../hooks/useTags";
-import { updatedTask } from "../api/task";
+import { deleteTask, updatedTask } from "../api/task";
 import { useAuth, useTasks } from "../store/store";
 import handleError from "../utils/handleError";
 import { toast } from "sonner";
@@ -13,7 +13,7 @@ export default function Tasks({ items }) {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm();
   const { tags, setTags, handleTags, removeTag } = useTags();
   const { accessToken } = useAuth();
@@ -43,17 +43,32 @@ export default function Tasks({ items }) {
     try {
       const res = await updatedTask(formdata, _id, accessToken);
       if (res.status === 200) {
-        return setData((prev) => {
+        setData((prev) =>
           prev.map((items) =>
             items._id === res.data.updatedTask._id
               ? res.data.updatedTask
               : items
-          );
-        });
+          )
+        );
+
+        toast.success(res.data.message);
+        setTags([]);
+        setIsModalOpen(false);
       }
-      setIsModalOpen(false);
-      toast.success(res.data.message);
-      console.log(res);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const deleteInput = async (item) => {
+    try {
+      const res = await deleteTask(item._id, accessToken);
+
+      if (res.status === 200) {
+        setData((prev) => prev.filter((items) => items._id !== item._id));
+
+        toast.success(res.data.message);
+      }
     } catch (error) {
       handleError(error);
     }
@@ -130,7 +145,7 @@ export default function Tasks({ items }) {
               type="submit"
               className="btn bg-[#974FD0] text-white mt-4 w-full"
             >
-              {isSubmitting ? "Sharing post..." : "Share"}
+              {isSubmitting ? "Updating post..." : "Update"}
             </button>
           </form>
         </Modal>
@@ -171,7 +186,10 @@ export default function Tasks({ items }) {
             >
               <i className="ri-edit-box-line"></i>Edit
             </button>
-            <button className="btn btn-ghost border-[#974FD0] text-[#974FD0]">
+            <button
+              className="btn btn-ghost border-[#974FD0] text-[#974FD0]"
+              onClick={() => deleteInput(items)}
+            >
               <i className="ri-delete-bin-line"></i>Delete
             </button>
           </div>

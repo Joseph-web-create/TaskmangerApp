@@ -17,7 +17,15 @@ export function getAllTasks(accessToken) {
 }
 
 export function updatedTask(formdata, id, accessToken) {
-  return axiosInstance.patch(`/taskApi/updateTask${id}`, formdata, {
+  return axiosInstance.patch(`/taskApi/updateTask/${id}`, formdata, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+}
+
+export function deleteTask(id, accessToken) {
+  return axiosInstance.delete(`/taskApi/deleteTask/${id}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },

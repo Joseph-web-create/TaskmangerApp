@@ -38,7 +38,7 @@ export default function AllTasks() {
       if (res.status === 201) {
         setIsModalOpen(false);
         toast.success(res.data.message);
-        setData((prev) => [...prev, data]);
+        setData((prev) => [res.data.task, ...prev]);
         setTags([]);
         reset();
       }
