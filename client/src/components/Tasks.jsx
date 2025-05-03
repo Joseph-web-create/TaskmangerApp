@@ -41,6 +41,8 @@ export default function Tasks({ items }) {
     };
 
     try {
+      if (!accessToken) return;
+      
       const res = await updatedTask(formdata, _id, accessToken);
       if (res.status === 200) {
         setData((prev) =>

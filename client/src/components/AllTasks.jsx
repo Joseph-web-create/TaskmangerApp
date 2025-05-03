@@ -34,6 +34,7 @@ export default function AllTasks() {
       tags,
     };
     try {
+      if (!accessToken) return;
       const res = await taskInput(formdata, accessToken);
       if (res.status === 201) {
         setIsModalOpen(false);

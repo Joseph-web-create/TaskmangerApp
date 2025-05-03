@@ -19,7 +19,7 @@ export const taskInputs = async (req, res, next) => {
 
     res.status(201).json({ success: true, message: "Post created", task });
   } catch (error) {
-    next();
+    next(error);
   }
 };
 

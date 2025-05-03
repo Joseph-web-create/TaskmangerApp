@@ -12,18 +12,21 @@ const verifyToken = (req, res, next) => {
     return next(createHttpError(401, "Token format is invalid"));
   }
 
-  const extraction = token.split(" ")[1];
-
   try {
-    const decodeToken =  jwt.verify(
-      extraction,
-      process.env.SECRET_ACESS_KEY
-    );
+    const extraction = token.split(" ")[1];
+
+    const decodeToken = jwt.verify(extraction, process.env.SECRET_ACESS_KEY);
     req.user = decodeToken;
     next();
   } catch (error) {
-    next(error);
+    if (error.name === "JsonWebTokenError") {
+      return next(createHttpError(401, "Invalid or malformed token"));
+    } else if (error.name === "TokenExpiredError") {
+      return next(createHttpError(401, "Token has expired"));
+    } else {
+      return next(createHttpError(500, "Authentication failed"));
+    }
   }
 };
 
-export default verifyToken
+export default verifyToken;
